@@ -3,14 +3,14 @@ import express, { NextFunction, Request, Response } from 'express';
 import "reflect-metadata";
 import { AppDataSource } from "./web/TypeORMConfig";
 
-import { PostController } from './web/controller/postController';
+import { PostController } from './web/controller/PostController';
 
 const app = express();
 
 app.use(express.json());
 
-AppDataSource.initialize().
-    then(() => {
+AppDataSource.initialize()
+    .then(() => {
         console.log('Datasource initialized successfully');
     })
     .catch((error) => {
