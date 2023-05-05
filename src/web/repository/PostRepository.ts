@@ -8,7 +8,7 @@ export interface PostRepository {
 }
 
 export class PostRepositoryImpl implements PostRepository {
-    private readonly repository: Repository<Post>;
+    private readonly repository: Repository<PostEntity>;
 
     constructor() {
         this.repository = AppDataSource.getRepository(PostEntity);
