@@ -1,0 +1,32 @@
+### this file is for testing the api
+POST http://localhost:3000/api/groupingActivity
+Content-Type: application/json
+
+{
+    "groupingActivityName": "測試組隊活動5",
+    "isSupervised": true,
+    "supervisorInvitationCode": "abcdefg",
+    "invitationCode": "ghijk"
+}
+###
+GET http://localhost:3000/api/users
+###
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+    "username":"billie",
+    "password":"password"
+}
+###
+POST http://localhost:3000/api/users/login
+Content-Type: application/json
+
+{
+    "username":"billie",
+    "password":"password"
+}
+###
+GET http://localhost:3000/api/posts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYmlsbGllIiwiaWF0IjoxNjgzNDczNDA3fQ.GfIaC0sY1_InmCBp81Vwo8adeAN-amJ3ur9pQ5MwHyQ
+###
