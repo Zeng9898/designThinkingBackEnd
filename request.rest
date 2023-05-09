@@ -28,5 +28,31 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:3000/api/posts
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYmlsbGllIiwiaWF0IjoxNjgzNDczNDA3fQ.GfIaC0sY1_InmCBp81Vwo8adeAN-amJ3ur9pQ5MwHyQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6Im5veWEiLCJpYXQiOjE2ODM2MTk2MTksImV4cCI6MTY4MzYxOTY0OX0.jSZAA7ImJeKR23X256iTdc81ObWzKn5Mcn_JbT29w7s
+###
+POST http://localhost:3000/api/token
+Content-Type: application/json
+
+{
+    "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6Im5veWEiLCJpYXQiOjE2ODM2MTk2MTksImV4cCI6MTY4MzYxOTY0OX0.jSZAA7ImJeKR23X256iTdc81ObWzKn5Mcn_JbT29w7s"
+}
+
+
+###
+POST http://localhost:3000/api/register
+Content-Type: application/json
+
+{
+    "username":"noya",
+    "password":"starbux",
+    "passwordConfirmation":"starbux"
+}
+###
+POST http://localhost:3000/api/login
+Content-Type: application/json
+
+{
+    "username":"noya",
+    "password":"starbux"
+}
 ###
