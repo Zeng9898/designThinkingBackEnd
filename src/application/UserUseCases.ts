@@ -12,7 +12,7 @@ export class UserUseCases {
     }
     async login(username: string, password: string): Promise<string> {
         const existingUser = await this.userRepository.findOneByUsername(username);
-        if (!existingUser) throw new Error("Username doesn't exist");
+        if (!existingUser) throw new Error("帳號不存在");
         const accessToken = await this.userRepository.login(existingUser.id!,username, password, existingUser.password);
         return accessToken;
     }

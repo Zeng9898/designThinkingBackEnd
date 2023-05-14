@@ -45,7 +45,7 @@ export class UserRepositoryImpl implements UserRepository {
             console.log('accessToken',accessToken);
             return accessToken;
         } else {
-            throw Error('wrong password');
+            throw Error('密碼錯誤');
         }
     }
 }

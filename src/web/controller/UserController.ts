@@ -26,7 +26,7 @@ export class UserController {
         try {
             const { username, password } = req.body;
             if (!username || !password) {
-                res.status(400).send('missing parameter');
+                res.status(400).send('缺少欄位');
                 return;
             }
             const accessToken = await this.userUseCases.login(username, password);

@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -25,6 +26,10 @@ AppDataSource.initialize()
 
 const app = express();
 
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
 app.use(express.json());
 
 const postController = new PostController();
@@ -100,7 +105,7 @@ app.listen(3000, () => {
 //     }
 // });
 app.get('/api/posts', authenticateToken, (req: Request, res: Response) => {
-    res.json({ msg: 'authorized'});
+    res.json({ msg: 'authorized' });
 })
 
 // app.post('/api/token', (req: Request, res: Response) => {
