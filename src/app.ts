@@ -1,18 +1,23 @@
 import express, { NextFunction, Request, Response } from 'express';
+import http from 'http';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import { Server, Socket } from 'socket.io';
 
 dotenv.config();
-
+// packages for database
 import "reflect-metadata";
 import { AppDataSource } from "./web/TypeORMConfig";
-
+// modules that clean architecutre needs
 import { PostController } from './web/controller/PostController';
 import { GroupingActitityController } from './web/controller/GroupingActivityController';
 import { UserController } from './web/controller/UserController';
 import { UserRepositoryImpl } from './web/repository/UserRepository';
 import { UserUseCases } from './application/UserUseCases';
+import { DesignThinkingActivityController } from './web/controller/DesignThinkingActivityController';
+import { DesignThinkingActivityRepositoryIpml } from './web/repository/DesignThinkingActivityRepository';
+import { DesignThinkingActivityUseCases } from './application/DesignThinkinActivityUseCases';
 
 
 
@@ -22,16 +27,38 @@ AppDataSource.initialize()
     })
     .catch((error) => {
         console.log('Datasource initialization failed', error);
-    });;
+    });
 
+// set up server and socket.io
 const app = express();
+const httpServer = http.createServer(app);
+const io = new Server(httpServer, {
+    cors: {
+        origin: 'http://localhost:5173',
+        credentials: true,
+    },
+});
 
+io.on('connection', socket => {
+    console.log(socket.id);
+    socket.on("updateBoard", cards => {
+        socket.broadcast.emit("updateBoard", cards)
+        //console.log(message);
+    })
+})
+
+httpServer.listen(3000, () => {
+    console.log("Application listening at the http://localhost:3000");
+});
+
+// cors and json request parsing
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true
 }));
 app.use(express.json());
 
+// for routing and dependency injection
 const postController = new PostController();
 const groupingActivityController = new GroupingActitityController();
 
@@ -41,6 +68,14 @@ const userUseCases = new UserUseCases(userRepositoryImpl);
 const userController = new UserController(userUseCases);
 app.post('/api/register', userController.register.bind(userController));
 app.post('/api/login', userController.login.bind(userController));
+
+const designThinkingActivityRepositoryIpml = new DesignThinkingActivityRepositoryIpml();
+const designThinkingActivityUseCases = new DesignThinkingActivityUseCases(designThinkingActivityRepositoryIpml);
+const designThinkingActivityController = new DesignThinkingActivityController(designThinkingActivityUseCases);
+app.post('/api/designThinkingActivity', designThinkingActivityController.create.bind(designThinkingActivityController));
+app.post('/api/designThinkingActivity/:designThinkingActivityId/users', designThinkingActivityController.joinUser.bind(designThinkingActivityController))
+app.get('/api/designThinkingActivity/:designThinkingActivityId', designThinkingActivityController.read.bind(designThinkingActivityController))
+
 
 // import implemented class
 // 丟給 use case
@@ -61,9 +96,7 @@ function authenticateToken(req: Request, res: Response, next: NextFunction) {
     })
 }
 
-app.listen(3000, () => {
-    console.log("Application listening at the http://localhost:3000");
-});
+
 
 
 // interface User {

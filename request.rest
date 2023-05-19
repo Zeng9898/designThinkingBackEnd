@@ -38,16 +38,16 @@ Content-Type: application/json
 }
 
 
-###
+### 註冊
 POST http://localhost:3000/api/register
 Content-Type: application/json
 
 {
-    "username":"noya",
-    "password":"starbux",
-    "passwordConfirmation":"starbux"
+    "username":"Tsai",
+    "password":"1",
+    "passwordConfirmation":"1"
 }
-###
+### 登入
 POST http://localhost:3000/api/login
 Content-Type: application/json
 
@@ -55,4 +55,19 @@ Content-Type: application/json
     "username":"noya",
     "password":"starbux"
 }
-###
+### 新增設計思考活到
+POST http://localhost:3000/api/designThinkingActivity
+Content-Type: application/json
+
+{
+    "designThinkingActivityName":"改善水壺材質 - 測試1"
+}
+### 新增 user 到設計思考活動
+POST http://localhost:3000/api/designThinkingActivity/4/users
+Content-Type: application/json
+
+{
+    "username":"noya"
+}
+### 讀取設計思考活動
+GET http://localhost:3000/api/designThinkingActivity/4
