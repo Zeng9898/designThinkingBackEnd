@@ -28,13 +28,13 @@ export class IdeaRepositoryImpl implements IdeaRepository {
         if (isNaN(routineId)) {
             throw Error('thinking routine id cannot be convert to number!');
         }
-        const user = await this.userRepository.findOneBy({ username: owner })
+        console.log(title, owner, )
+        const user = await this.userRepository.findOneBy({ nickname: owner })
         const thinkingRoutine = await this.thinkingRoutineRepository.findOneBy({ id: routineId })
         const toIdea = await this.ideaRepository.findOneBy({ id: to })
         console.log(to, toIdea);
         if (user && thinkingRoutine) {
-            const newIdea = new IdeaEntity(title, content);
-            newIdea.owner = user;
+            const newIdea = new IdeaEntity(title, content, user);
             newIdea.thinkingRoutineEntity = thinkingRoutine;
             if (toIdea) {
                 newIdea.to = newIdea.to|| [];
