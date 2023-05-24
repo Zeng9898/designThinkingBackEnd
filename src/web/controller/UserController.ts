@@ -29,8 +29,8 @@ export class UserController {
                 res.status(400).send('缺少欄位');
                 return;
             }
-            const accessToken = await this.userUseCases.login(username, password);
-            res.status(201).json({ accessToken: accessToken });
+            const accessTokenAndUserInfo = await this.userUseCases.login(username, password);
+            res.status(201).json(accessTokenAndUserInfo);
         } catch (error) {
             if (typeof error === 'object' && error !== null && 'message' in error) {
                 res.status(500).json({ message: error.message });

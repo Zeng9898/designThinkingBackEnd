@@ -4,8 +4,9 @@ import { SubStageEntity } from './SubStageEntity';
 
 @Entity()
 export class StageEntity {
-    constructor(stageName: string) {
+    constructor(stageName: string, dtActivityEntity: DTActivityEntity) {
         this.stageName = stageName;
+        this.dtActivityEntity = dtActivityEntity;
     }
 
     @PrimaryGeneratedColumn()
@@ -15,7 +16,7 @@ export class StageEntity {
     stageName: string;
 
     @ManyToOne(() => DTActivityEntity, (dtActivityEntity) => dtActivityEntity.stages)
-    dtActivityEntity?: DTActivityEntity;
+    dtActivityEntity: DTActivityEntity;
 
     @OneToMany(() => SubStageEntity, (subStageEntity) => subStageEntity.stageEntity)
     substages?: SubStageEntity[]

@@ -106,6 +106,7 @@ const designThinkingActivityController = new DesignThinkingActivityController(de
 app.post('/api/designThinkingActivity', designThinkingActivityController.create.bind(designThinkingActivityController));
 app.post('/api/designThinkingActivity/:designThinkingActivityId/users', designThinkingActivityController.joinUser.bind(designThinkingActivityController))
 app.get('/api/designThinkingActivity/:designThinkingActivityId', designThinkingActivityController.read.bind(designThinkingActivityController))
+app.get('/api/users/:userId/designThinkingActivities', designThinkingActivityController.findDesignThinkingActivityForUser.bind(designThinkingActivityController))
 
 const thinkingRoutineRepositoryIpml = new ThinkingRoutineRepositoryIpml();
 const thinkingRoutineUseCases = new ThinkingRoutineUseCases(thinkingRoutineRepositoryIpml);

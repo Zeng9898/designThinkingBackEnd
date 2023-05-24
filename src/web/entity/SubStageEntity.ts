@@ -4,10 +4,11 @@ import { ThinkingRoutineEntity } from './ThinkingRoutineEntity';
 
 @Entity()
 export class SubStageEntity {
-    constructor(subStageName: string, subStageHint: string, isComplete: boolean) {
+    constructor(subStageName: string, subStageHint: string, isComplete: boolean, stageEntity:StageEntity) {
         this.subStageName = subStageName;
         this.subStageHint = subStageHint;
         this.isComplete = isComplete;
+        this.stageEntity = stageEntity;
     }
 
     @PrimaryGeneratedColumn()
@@ -23,9 +24,8 @@ export class SubStageEntity {
     isComplete: boolean;
 
     @ManyToOne(() => StageEntity, (stageEntity) => stageEntity.substages)
-    stageEntity?: StageEntity;
+    stageEntity: StageEntity;
 
-    @OneToMany
-    (() => ThinkingRoutineEntity, (thinkingRoutineEntity) => thinkingRoutineEntity.subStageEntity)
+    @OneToMany(() => ThinkingRoutineEntity, (thinkingRoutineEntity) => thinkingRoutineEntity.subStageEntity)
     thinkingRoutines?: ThinkingRoutineEntity[]
 }

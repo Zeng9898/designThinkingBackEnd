@@ -14,7 +14,7 @@ export class DTActivityEntity {
     @Column()
     dtActivityName: string;
 
-    @OneToOne(() => UserEntity)
+    @OneToOne(() => UserEntity) //這裡的 one-to-one 應該會有問題，因為一個 user 可以當多個活動的組長，所以應該是一對多
     @JoinColumn()
     leader?: UserEntity;
 

@@ -9,7 +9,7 @@ import jwt from 'jsonwebtoken';
 export interface UserRepository {
     register(nickname: string, username: string, password: string): Promise<UserEntity>;
     findOneByUsername(username: string): Promise<UserEntity | null>;
-    login(userId: number, usernameParam: string, password: string, hashedPassword: string): Promise<string>;
+    login(userId: number, nickname: string, usernameParam: string, password: string, hashedPassword: string): Promise<object>;
 }
 
 export class UserRepositoryImpl implements UserRepository {
@@ -36,14 +36,14 @@ export class UserRepositoryImpl implements UserRepository {
         return await this.userRepository.findOneBy({ username: username })
     }
 
-    async login(userId: number, usernameParam: string, password: string, hashedPassword: string): Promise<string> {
+    async login(userId: number, nickname: string, usernameParam: string, password: string, hashedPassword: string): Promise<object> {
         if (await bcrypt.compare(password, hashedPassword)) {
             const username = usernameParam;
             const user = { id: userId, name: username };
             const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET!, { expiresIn: '30s' })
             console.log('secret', process.env.ACCESS_TOKEN_SECRET)
             console.log('accessToken', accessToken);
-            return accessToken;
+            return /*accessToken*/{ accessToken: accessToken, userId: userId, nickname: nickname };
         } else {
             throw Error('密碼錯誤');
         }

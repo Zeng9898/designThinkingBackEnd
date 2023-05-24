@@ -5,9 +5,10 @@ import { ThinkingRoutineEntity } from './ThinkingRoutineEntity';
 
 @Entity()
 export class IdeaEntity {
-    constructor(title: string, content: string) {
+    constructor(title: string, content: string, owner: UserEntity) {
         this.title = title;
         this.content = content;
+        this.owner = owner;
     }
 
     @PrimaryGeneratedColumn()
@@ -20,7 +21,7 @@ export class IdeaEntity {
     content: string;
 
     @ManyToOne(() => UserEntity, (userEntity) => userEntity.ideas)
-    owner?: UserEntity;
+    owner: UserEntity;
 
     // @OneToOne(() => IdeaEntity)
     // @JoinColumn()
@@ -29,7 +30,7 @@ export class IdeaEntity {
     @ManyToMany(() => IdeaEntity)
     @JoinTable()
     to?: IdeaEntity[];
-    
+
     @ManyToOne(() => ThinkingRoutineEntity, (thinkingRoutineEntity) => thinkingRoutineEntity.ideas)
     thinkingRoutineEntity?: ThinkingRoutineEntity;
 }

@@ -8,13 +8,14 @@ type BelongColumn = '待排程' | '進行中' | '待審核' | '已完成'
 
 @Entity()
 export class ThinkingRoutineEntity {
-    constructor(thinkingRoutineName: string, routineType: string, belongColumn: string, needChecked: boolean, index: number, hint:string) {
+    constructor(thinkingRoutineName: string, routineType: string, belongColumn: string, needChecked: boolean, index: number, hint: string, subStageEntity: SubStageEntity) {
         this.thinkingRoutineName = thinkingRoutineName;
         this.routineType = routineType;
         this.belongColumn = belongColumn;
         this.needChecked = needChecked;
         this.index = index;
         this.hint = hint;
+        this.subStageEntity = subStageEntity;
     }
 
     @PrimaryGeneratedColumn()
@@ -36,17 +37,16 @@ export class ThinkingRoutineEntity {
     index: number;
 
     @Column()
-    hint:string;
+    hint: string;
 
     @ManyToOne(() => SubStageEntity, (subStageEntity) => subStageEntity.thinkingRoutines)
-    subStageEntity?: SubStageEntity;
+    subStageEntity: SubStageEntity;
 
     @ManyToMany(() => UserEntity)
     @JoinTable()
     assignees?: UserEntity[];
 
-    @OneToMany
-    (() => IdeaEntity, (ideaEntity) => ideaEntity.thinkingRoutineEntity)
+    @OneToMany(() => IdeaEntity, (ideaEntity) => ideaEntity.thinkingRoutineEntity)
     ideas?: IdeaEntity[]
 
     @AfterLoad()

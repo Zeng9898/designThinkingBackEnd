@@ -61,18 +61,22 @@ POST http://localhost:3000/api/designThinkingActivity
 Content-Type: application/json
 
 {
-    "designThinkingActivityName":"改善水壺材質 - 測試3"
+    "designThinkingActivityName":"改善購物車"
 }
 ### 新增 user 到設計思考活動
-POST http://localhost:3000/api/designThinkingActivity/5/users
+POST http://localhost:3000/api/designThinkingActivity/1/users
 Content-Type: application/json
 
 {
-    "username":"noya"
+    "username":"yihong"
 }
 ### 讀取設計思考活動
-GET http://localhost:3000/api/designThinkingActivity/10
+GET http://localhost:3000/api/designThinkingActivity/1
 
 ### 讀取thingking Routine
 GET http://localhost:3000/api/thinkingRoutine/33
+Content-Type: application/json
+
+### 讀取某 user 的 design thinking activities
+GET http://localhost:3000/api/users/1/designThinkingActivities
 Content-Type: application/json
