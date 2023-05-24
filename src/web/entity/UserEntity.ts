@@ -1,8 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { IdeaEntity } from './ideaEntity';
 
 @Entity()
 export class UserEntity {
-    constructor(username: string, password: string) {
+    constructor(nickname:string, username: string, password: string) {
+        this.nickname = nickname;
         this.username = username;
         this.password = password;
     }
@@ -10,9 +12,16 @@ export class UserEntity {
     @PrimaryGeneratedColumn()
     id?: number;
 
+    @Column()
+    nickname: string;
+
     @Column({ unique: true })
     username: string;
 
     @Column()
     password: string;
+
+    @OneToMany
+    (() => IdeaEntity, (ideaEntity) => ideaEntity.owner)
+    ideas?: IdeaEntity[]
 }

@@ -6,12 +6,12 @@ export class UserController {
 
     async register(req: Request, res: Response): Promise<void> {
         try {
-            const { username, password, passwordConfirmation } = req.body;
-            if (!username || !password || !passwordConfirmation) {
+            const { nickname, username, password, passwordConfirmation } = req.body;
+            if (!nickname || !username || !password || !passwordConfirmation) {
                 res.status(400).send('missing parameter');
                 return;
             }
-            const createdUser = await this.userUseCases.register(username, password, passwordConfirmation);
+            const createdUser = await this.userUseCases.register(nickname ,username, password, passwordConfirmation);
             res.status(201).json(createdUser);
         } catch (error) {
             if (typeof error === 'object' && error !== null && 'message' in error) {

@@ -18,7 +18,12 @@ import { UserUseCases } from './application/UserUseCases';
 import { DesignThinkingActivityController } from './web/controller/DesignThinkingActivityController';
 import { DesignThinkingActivityRepositoryIpml } from './web/repository/DesignThinkingActivityRepository';
 import { DesignThinkingActivityUseCases } from './application/DesignThinkinActivityUseCases';
-
+import { IdeaRepositoryImpl } from './web/repository/IdeaRepository';
+import { IdeaUseCases } from './application/IdeaUseCases';
+import { ThinkingRoutineEntity } from './web/entity/ThinkingRoutineEntity';
+import { ThinkingRoutineRepositoryIpml } from './web/repository/ThinkingRoutineRepository';
+import { ThinkingRoutineUseCases } from './application/ThinkingRoutineUseCases';
+import { ThinkinRoutineController } from './web/controller/ThinkingRoutineController';
 
 
 AppDataSource.initialize()
@@ -39,14 +44,6 @@ const io = new Server(httpServer, {
     },
 });
 
-io.on('connection', socket => {
-    console.log(socket.id);
-    socket.on("updateBoard", cards => {
-        socket.broadcast.emit("updateBoard", cards)
-        //console.log(message);
-    })
-})
-
 httpServer.listen(3000, () => {
     console.log("Application listening at the http://localhost:3000");
 });
@@ -57,6 +54,40 @@ app.use(cors({
     credentials: true
 }));
 app.use(express.json());
+
+const ideaRepositoryImpl = new IdeaRepositoryImpl();
+const ideaUseCases = new IdeaUseCases(ideaRepositoryImpl);
+
+io.on('connection', socket => {
+    console.log(socket.id);
+    socket.on("updateBoard", cards => {
+        socket.broadcast.emit("updateBoard", cards)
+        //console.log(message);
+    })
+    socket.on('createNode', async (node) => {
+        try {
+            console.log(node);
+            // Perform some operations and handle errors if they occur
+            if (!node.title || !node.owner || !node.thinkingRoutineId || !node.content) {
+                const errorMessage = 'lack of parameter for creating node.';
+                socket.emit('errorEvent', errorMessage);
+            } else {
+                console.log('go to create');
+                const nullNumber: number = 0;
+                if (node.to === null)
+                    await ideaUseCases.create(node.title, node.owner, node.thinkingRoutineId, node.content, nullNumber);
+                else
+                    await ideaUseCases.create(node.title, node.owner, node.thinkingRoutineId, node.content, node.to);
+                socket.emit('nodeUpdated', 'updated node successful');
+            }
+        } catch (error) {
+            console.log(error);
+            socket.emit('errorEvent', error);
+        }
+    });
+})
+
+
 
 // for routing and dependency injection
 const postController = new PostController();
@@ -75,6 +106,11 @@ const designThinkingActivityController = new DesignThinkingActivityController(de
 app.post('/api/designThinkingActivity', designThinkingActivityController.create.bind(designThinkingActivityController));
 app.post('/api/designThinkingActivity/:designThinkingActivityId/users', designThinkingActivityController.joinUser.bind(designThinkingActivityController))
 app.get('/api/designThinkingActivity/:designThinkingActivityId', designThinkingActivityController.read.bind(designThinkingActivityController))
+
+const thinkingRoutineRepositoryIpml = new ThinkingRoutineRepositoryIpml();
+const thinkingRoutineUseCases = new ThinkingRoutineUseCases(thinkingRoutineRepositoryIpml);
+const thinkingRoutineController = new ThinkinRoutineController(thinkingRoutineUseCases);
+app.get('/api/thinkingRoutine/:thinkingRoutineId', thinkingRoutineController.read.bind(thinkingRoutineController));
 
 
 // import implemented class

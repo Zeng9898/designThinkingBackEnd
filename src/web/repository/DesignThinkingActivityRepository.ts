@@ -40,8 +40,15 @@ export class DesignThinkingActivityRepositoryIpml implements DesignThinkingActiv
         subStage.stageEntity = stage;
         await this.subStageRepository.save(subStage);
         thinkingRoutines.forEach(async (routine) => {
-            const thinkingRoutine = new ThinkingRoutineEntity(routine.thinkingRoutineName, routine.thinkingRoutineType, routine.belongColumn, routine.needChecked, routine.index);
+            const thinkingRoutine = new ThinkingRoutineEntity(routine.thinkingRoutineName, routine.thinkingRoutineType, routine.belongColumn, routine.needChecked, routine.index, routine.hint);
             thinkingRoutine.subStageEntity = subStage;
+            const assignees = routine.assignees;
+            const assignedUsers = await this.userRepository
+                .createQueryBuilder('user')
+                .where('user.username IN (:...usernames)', { usernames:assignees })
+                .getMany();
+            console.log(assignedUsers);
+            thinkingRoutine.assignees = assignedUsers;
             await this.thinkingRoutineRepository.save(thinkingRoutine);
         })
     }
@@ -73,7 +80,7 @@ export class DesignThinkingActivityRepositoryIpml implements DesignThinkingActiv
         //     .where('DTActivityEntity.id = :id', { id: designThinkinActivityId }).getOne();
 
         const designThinkingActivity = await this.DTArepository.findOne({
-            relations: ['users', 'stages', 'stages.substages', 'stages.substages.thinkingRoutines'],
+            relations: ['users', 'stages', 'stages.substages', 'stages.substages.thinkingRoutines', 'stages.substages.thinkingRoutines.assignees'],
             where: { id: designThinkingActivityId },
         });
         if (designThinkingActivity === null) {
@@ -89,7 +96,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "列出利害關係人",
         thinkingRoutineType: "發散",
-        asignees: ["zeng"],
+        assignees: ["zeng"],
         hint: "請列出你心目中的利害關係人",
         needChecked: true,
         belongColumn: "待排程",
@@ -98,7 +105,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "列出利害關係人",
         thinkingRoutineType: "發散",
-        asignees: ["kang"],
+        assignees: ["kang"],
         hint: "請列出你心目中的利害關係人",
         needChecked: true,
         belongColumn: "待排程",
@@ -107,7 +114,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "列出利害關係人",
         thinkingRoutineType: "發散",
-        asignees: ["houl"],
+        assignees: ["houl"],
         hint: "請列出你心目中的利害關係人",
         needChecked: true,
         belongColumn: "待排程",
@@ -116,7 +123,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "列出利害關係人",
         thinkingRoutineType: "發散",
-        asignees: ["yang"],
+        assignees: ["yang"],
         hint: "請列出你心目中的利害關係人",
         needChecked: true,
         belongColumn: "待排程",
@@ -125,19 +132,55 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "歸納利害關係人",
         thinkingRoutineType: "歸納",
-        asignees: ["yang", "zeng", "kang", "houl"],
+        assignees: ["yang", "zeng", "kang", "houl"],
         hint: "請將類型相似的利害關係人貼上標籤",
         needChecked: true,
         belongColumn: "進行中",
         index: 0
     },
     {
+        thinkingRoutineName: "列出利害關係人-小組",
+        thinkingRoutineType: "發散",
+        assignees: ["yang", "zeng", "kang", "houl"],
+        hint: "請以小組為單位列出利害關係人",
+        needChecked: true,
+        belongColumn: "待審核",
+        index: 0
+    },
+    {
         thinkingRoutineName: "自我介紹",
         thinkingRoutineType: "發散",
-        asignees: ["yang", "zeng", "kang", "houl"],
+        assignees: ["yang", "zeng", "kang", "houl"],
         hint: "請說出自己的特質",
         needChecked: false,
         belongColumn: "已完成",
         index: 0
     }
 ]
+
+const nodes = [
+    {
+      title:"自我介紹",
+      content:"請大家依照自我介紹節點延伸出的：特質、三個形容詞、最能形容自己的三件事，來做自我介紹",
+      owner:"yihong",
+    },
+    {
+      title:"特質",
+      content:"請大家以此延伸出自己的特質",
+      owner:"yihong",
+    },
+    {
+      id:3,
+      title:"三件事形容自己",
+      content:"請大家列出形容自己的三件事",
+      owner:"yihong",
+      to:1
+    },
+    {
+      id:4,
+      title:"三個形容詞",
+      content:"請大家列出形容自己的三件事",
+      owner:"yihong",
+      to:1
+    }
+  ];

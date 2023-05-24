@@ -11,7 +11,7 @@ export class DesignThinkingActivityController {
                 res.status(400).send('missing parameter');
                 return;
             }
-            const createdDesignThinkingActivity = await this.designThinkingActivityUseCases.createDesignThinkingActivity(designThinkingActivityName);
+            await this.designThinkingActivityUseCases.createDesignThinkingActivity(designThinkingActivityName);
             res.status(201).json(/*createdDesignThinkingActivity*/{ message: "test OK" });
         } catch (error) {
             if (typeof error === 'object' && error !== null && 'message' in error) {
