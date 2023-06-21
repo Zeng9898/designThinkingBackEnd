@@ -39,14 +39,14 @@ Content-Type: application/json
 
 
 ### 註冊
-POST http://localhost:3000/api/register
+POST http://140.115.126.102:3000/api/register
 Content-Type: application/json
 
 {
-    "nickname":"康家豪",
-    "username":"kang",
-    "password":"1",
-    "passwordConfirmation":"1"
+    "nickname":"謝群𠒣",
+    "username":"012105",
+    "password":"012105",
+    "passwordConfirmation":"012105"
 }
 ### 登入
 POST http://localhost:3000/api/login
@@ -57,26 +57,26 @@ Content-Type: application/json
     "password":"1"
 }
 ### 新增設計思考活動
-POST http://localhost:3000/api/designThinkingActivity
+POST http://140.115.126.102:3000/api/designThinkingActivity
 Content-Type: application/json
 
 {
     "designThinkingActivityName":"改善購物車"
 }
 ### 新增 user 到設計思考活動
-POST http://localhost:3000/api/designThinkingActivity/1/users
+POST http://140.115.126.102:3000/api/designThinkingActivity/9/users
 Content-Type: application/json
 
 {
-    "username":"yihong"
+    "username":"012136"
 }
 ### 讀取設計思考活動
-GET http://localhost:3000/api/designThinkingActivity/1
+GET http://140.115.126.102:3000/api/designThinkingActivity/9
 
 ### 讀取thingking Routine
 GET http://localhost:3000/api/thinkingRoutine/33
 Content-Type: application/json
 
 ### 讀取某 user 的 design thinking activities
-GET http://localhost:3000/api/users/1/designThinkingActivities
+GET http://localhost:3000/api/users/2/designThinkingActivities
 Content-Type: application/json

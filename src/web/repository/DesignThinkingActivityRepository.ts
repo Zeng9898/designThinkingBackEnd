@@ -110,7 +110,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "列出利害關係人",
         thinkingRoutineType: "發散",
-        assignees: ["yihong"],
+        assignees: [],
         hint: "請列出你心目中的利害關係人",
         needChecked: true,
         belongColumn: "進行中",
@@ -119,7 +119,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "列出利害關係人",
         thinkingRoutineType: "發散",
-        assignees: ["kang"],
+        assignees: [],
         hint: "請列出你心目中的利害關係人",
         needChecked: true,
         belongColumn: "進行中",
@@ -128,7 +128,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "列出利害關係人",
         thinkingRoutineType: "發散",
-        assignees: ["houl"],
+        assignees: [],
         hint: "請列出你心目中的利害關係人",
         needChecked: true,
         belongColumn: "進行中",
@@ -137,7 +137,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "列出利害關係人",
         thinkingRoutineType: "發散",
-        assignees: ["ru"],
+        assignees: [],
         hint: "請列出你心目中的利害關係人",
         needChecked: true,
         belongColumn: "進行中",
@@ -146,7 +146,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "歸納利害關係人",
         thinkingRoutineType: "歸納",
-        assignees: ["ru", "yihong", "kang", "houl"],
+        assignees: ["yeh", "lin"],
         hint: "請將類型相似的利害關係人貼上標籤",
         needChecked: true,
         belongColumn: "進行中",
@@ -155,7 +155,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "列出利害關係人-小組",
         thinkingRoutineType: "發散",
-        assignees: ["ru", "yihong", "kang", "houl"],
+        assignees: ["yeh", "lin"],
         hint: "請以小組為單位列出利害關係人",
         needChecked: true,
         belongColumn: "進行中",
@@ -164,7 +164,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "自我介紹",
         thinkingRoutineType: "發散",
-        assignees: ["ru", "yihong", "kang", "houl"],
+        assignees: ["yeh", "lin"],
         hint: "請說出自己的特質",
         needChecked: false,
         belongColumn: "進行中",
