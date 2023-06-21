@@ -7,7 +7,7 @@ import { DTActivityEntity } from "./entity/DTActivityEntity"
 import { StageEntity } from "./entity/StageEntity"
 import { SubStageEntity } from "./entity/SubStageEntity"
 import { ThinkingRoutineEntity } from "./entity/ThinkingRoutineEntity"
-import { IdeaEntity } from "./entity/ideaEntity"
+import { IdeaEntity } from "./entity/IdeaEntity"
 
 export const AppDataSource = new DataSource({
     type: "postgres",

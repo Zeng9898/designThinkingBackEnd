@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTable, AfterLoad, OneToMany } from 'typeorm';
 import { SubStageEntity } from './SubStageEntity';
 import { UserEntity } from './UserEntity';
-import { IdeaEntity } from './ideaEntity';
+import { IdeaEntity } from './IdeaEntity';
 
 type RoutineType = '發散' | '收斂';
 type BelongColumn = '待排程' | '進行中' | '待審核' | '已完成'

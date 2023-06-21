@@ -39,11 +39,11 @@ Content-Type: application/json
 
 
 ### 註冊
-POST http://localhost:3000/api/register
+POST http://140.115.126.102:3000/api/register
 Content-Type: application/json
 
 {
-    "nickname":"康家豪",
+    "nickname":"",
     "username":"kang",
     "password":"1",
     "passwordConfirmation":"1"
@@ -57,18 +57,18 @@ Content-Type: application/json
     "password":"1"
 }
 ### 新增設計思考活動
-POST http://localhost:3000/api/designThinkingActivity
+POST http://140.115.126.102:3000/api/designThinkingActivity
 Content-Type: application/json
 
 {
-    "designThinkingActivityName":"改善購物車"
+    "designThinkingActivityName":"改善購物車 team1"
 }
 ### 新增 user 到設計思考活動
-POST http://localhost:3000/api/designThinkingActivity/1/users
+POST http://localhost:3000/api/designThinkingActivity/2/users
 Content-Type: application/json
 
 {
-    "username":"yihong"
+    "username":"ru"
 }
 ### 讀取設計思考活動
 GET http://localhost:3000/api/designThinkingActivity/1

@@ -1,4 +1,4 @@
-import { IdeaEntity } from '../entity/ideaEntity';
+import { IdeaEntity } from "../entity/IdeaEntity";
 import { AppDataSource } from "../TypeORMConfig";
 import { Repository } from 'typeorm';
 import { ThinkingRoutineEntity } from '../entity/ThinkingRoutineEntity';
@@ -21,10 +21,7 @@ export class IdeaRepositoryImpl implements IdeaRepository {
     }
 
     async create(title: string, owner: string, thinkingRoutineId: string, content: string, to: number): Promise<IdeaEntity> {
-        console.log('before convert', thinkingRoutineId)
         const routineId = parseInt(thinkingRoutineId, 10);
-        console.log('after convert', routineId)
-
         if (isNaN(routineId)) {
             throw Error('thinking routine id cannot be convert to number!');
         }
@@ -32,7 +29,6 @@ export class IdeaRepositoryImpl implements IdeaRepository {
         const user = await this.userRepository.findOneBy({ nickname: owner })
         const thinkingRoutine = await this.thinkingRoutineRepository.findOneBy({ id: routineId })
         const toIdea = await this.ideaRepository.findOneBy({ id: to })
-        console.log(to, toIdea);
         if (user && thinkingRoutine) {
             const newIdea = new IdeaEntity(title, content, user);
             newIdea.thinkingRoutineEntity = thinkingRoutine;

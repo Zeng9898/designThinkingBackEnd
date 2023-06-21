@@ -39,20 +39,26 @@ const app = express();
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
     cors: {
-        origin: 'http://localhost:5173',
+        origin: 'http://140.115.126.102:5173',
         credentials: true,
     },
 });
 
+app.use(cors({
+    origin:"http://140.115.126.102:5173",
+    methods:['GET','PUT','POST'],
+    credentials:true
+}));
+
 httpServer.listen(3000, () => {
-    console.log("Application listening at the http://localhost:3000");
+    console.log("Application listening at the http://140.115.126.102:3000");
 });
 
 // cors and json request parsing
-app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true
-}));
+// app.use(cors({
+//     origin: 'http://localhost:5173',
+//     credentials: true
+// }));
 app.use(express.json());
 
 const ideaRepositoryImpl = new IdeaRepositoryImpl();
@@ -64,21 +70,33 @@ io.on('connection', socket => {
         socket.broadcast.emit("updateBoard", cards)
         //console.log(message);
     })
-    socket.on('createNode', async (node) => {
+    socket.on('join-room', room => {
+        console.log(`someone join room ${room}`)
+        socket.join(room);
+    })
+    socket.on('leave-room', room => {
+        console.log(`someone leave room ${room}`)
+        socket.leave(room);
+    })
+    socket.on('createNode', async (room, node) => {
         try {
-            console.log(node);
-            // Perform some operations and handle errors if they occur
-            if (!node.title || !node.owner || !node.thinkingRoutineId || !node.content) {
-                const errorMessage = 'lack of parameter for creating node.';
-                socket.emit('errorEvent', errorMessage);
-            } else {
-                console.log('go to create');
-                const nullNumber: number = 0;
-                if (node.to === null)
-                    await ideaUseCases.create(node.title, node.owner, node.thinkingRoutineId, node.content, nullNumber);
-                else
-                    await ideaUseCases.create(node.title, node.owner, node.thinkingRoutineId, node.content, node.to);
-                socket.emit('nodeUpdated', 'updated node successful');
+            console.log(typeof room, room)
+            if(room === ""){
+                socket.emit('nodeUpdated','no room provided');
+            }else{
+                // Perform some operations and handle errors if they occur
+                if (!node.title || !node.owner || !node.thinkingRoutineId || !node.content) {
+                    const errorMessage = 'lack of parameter for creating node.';
+                    socket.to(room).emit('errorEvent', errorMessage);
+                } else {
+                    const nullNumber: number = 0;
+                    if (node.to === null)
+                        await ideaUseCases.create(node.title, node.owner, node.thinkingRoutineId, node.content, nullNumber);
+                    else
+                        await ideaUseCases.create(node.title, node.owner, node.thinkingRoutineId, node.content, node.to);
+                    console.log(room)
+                    io.to(room).emit('nodeUpdated', 'updated node successful');
+                }
             }
         } catch (error) {
             console.log(error);
