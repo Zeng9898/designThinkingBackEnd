@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { Server, Socket } from 'socket.io';
-
+import os from 'os';
 dotenv.config();
 // packages for database
 import "reflect-metadata";
@@ -39,21 +39,37 @@ const app = express();
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
     cors: {
-        origin: 'http://140.115.126.102:5173',
+        origin: 'http://localhost:5173',
         credentials: true,
     },
 });
 
 app.use(cors({
-    origin:"http://140.115.126.102:5173",
-    methods:['GET','PUT','POST'],
-    credentials:true
+    origin: "http://localhost:5173",
+    methods: ['GET', 'PUT', 'POST'],
+    credentials: true
 }));
 
 httpServer.listen(3000, () => {
-    console.log("Application listening at the http://140.115.126.102:3000");
+    const address = httpServer.address() as any;
+    const ipAddress = getLocalIpAddress();
+    console.log(`Server listening on ${ipAddress}:${address.port}`);
 });
 
+function getLocalIpAddress() {
+    const interfaces = os.networkInterfaces();
+    for (const interfaceName in interfaces) {
+        const addresses = interfaces[interfaceName];
+        if (addresses) {
+            for (const address of addresses) {
+                if (address.family === 'IPv4' && !address.internal) {
+                    return address.address;
+                }
+            }
+        }
+    }
+    return 'localhost'; // Fallback to localhost if no IP address found
+}
 // cors and json request parsing
 // app.use(cors({
 //     origin: 'http://localhost:5173',
@@ -81,9 +97,9 @@ io.on('connection', socket => {
     socket.on('createNode', async (room, node) => {
         try {
             console.log(typeof room, room)
-            if(room === ""){
-                socket.emit('nodeUpdated','no room provided');
-            }else{
+            if (room === "") {
+                socket.emit('nodeUpdated', 'no room provided');
+            } else {
                 // Perform some operations and handle errors if they occur
                 if (!node.title || !node.owner || !node.thinkingRoutineId || !node.content) {
                     const errorMessage = 'lack of parameter for creating node.';

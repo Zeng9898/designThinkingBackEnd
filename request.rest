@@ -49,7 +49,7 @@ Content-Type: application/json
     "passwordConfirmation":"1"
 }
 ### 登入
-POST http://localhost:3000/api/login
+POST http://10.242.104.221:3000/api/login
 Content-Type: application/json
 
 {

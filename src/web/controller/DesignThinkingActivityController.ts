@@ -6,12 +6,14 @@ export class DesignThinkingActivityController {
 
     async create(req: Request, res: Response): Promise<void> {
         try {
-            const { designThinkingActivityName } = req.body;
-            if (!designThinkingActivityName) {
-                res.status(400).send('missing design thinking activity name parameter');
+            const { designThinkingActivityName, designThinkingActivityDescription, leaderId } = req.body;
+            console.log("createActivity")
+            console.log(designThinkingActivityName, designThinkingActivityDescription, leaderId);
+            if (!designThinkingActivityName || !designThinkingActivityDescription || !leaderId) {
+                res.status(400).send('missing designThinkingActivityName or designThinkinActivityDescription parameter or leaderId');
                 return;
             }
-            const designThinkingActivity = await this.designThinkingActivityUseCases.createDesignThinkingActivity(designThinkingActivityName);
+            const designThinkingActivity = await this.designThinkingActivityUseCases.createDesignThinkingActivity(designThinkingActivityName, designThinkingActivityDescription, leaderId);
             res.status(201).json(/*createdDesignThinkingActivity*/{ message: "create design thinking activity successfully", designThinkingActivity: designThinkingActivity });
         } catch (error) {
             if (typeof error === 'object' && error !== null && 'message' in error) {

@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { IdeaEntity } from './IdeaEntity';
+import { DTActivityEntity } from './DTActivityEntity';
 
 @Entity()
 export class UserEntity {
@@ -23,5 +24,9 @@ export class UserEntity {
 
     @OneToMany
     (() => IdeaEntity, (ideaEntity) => ideaEntity.owner)
-    ideas?: IdeaEntity[]
+    ideas?: IdeaEntity[];
+
+    @OneToMany
+    (() => DTActivityEntity, (dtActivityEntity) => dtActivityEntity.leaderShip) //一個設計思考活動有一個組長
+    dTActivities?: DTActivityEntity[]
 }

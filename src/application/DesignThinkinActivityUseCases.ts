@@ -6,8 +6,8 @@ export class DesignThinkingActivityUseCases {
 
     //constructor(private readonly userRepository: UserRepository) { } //傳入UserReposityImpl
 
-    async createDesignThinkingActivity(designThinkingActivityName: string): Promise<DTActivityEntity> {
-        const designThinkingActivity = await this.designThinkingActivityRepository.create(designThinkingActivityName);
+    async createDesignThinkingActivity(designThinkingActivityName: string, designThinkingActivityDescription: string, leaderId: number): Promise<DTActivityEntity> {
+        const designThinkingActivity = await this.designThinkingActivityRepository.create(designThinkingActivityName, designThinkingActivityDescription, leaderId);
         return designThinkingActivity
     }
 

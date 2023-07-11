@@ -9,7 +9,7 @@ import { ThinkingRoutineEntity } from '../entity/ThinkingRoutineEntity';
 //dotenv.config();
 
 export interface DesignThinkingActivityRepository {
-    create(designThinkingActivityName: string): Promise<DTActivityEntity>/*Promise<DTActivityEntity>*/
+    create(designThinkingActivityName: string, designThinkingActivityDescription: string, leaderId: number): Promise<DTActivityEntity>/*Promise<DTActivityEntity>*/
     joinUser(username: string, designThinkingActivityId: number): Promise<DTActivityEntity>
     read(designThinkinActivityId: number): Promise<DTActivityEntity>
     findDesignThinkingActivityForUser(userId: number): Promise<DTActivityEntity[]>
@@ -31,9 +31,36 @@ export class DesignThinkingActivityRepositoryIpml implements DesignThinkingActiv
         this.userRepository = AppDataSource.getRepository(UserEntity);
     }
 
-    async create(designThinkingActivityName: string):/*Promise<DTActivityEntity>*/Promise<DTActivityEntity> {
-        const DTActivity = new DTActivityEntity(designThinkingActivityName);
-        await this.DTArepository.save(DTActivity);
+    async create(designThinkingActivityName: string, designThinkingActivityDescription: string, leaderId: number):/*Promise<DTActivityEntity>*/Promise<DTActivityEntity> {
+        // const DTActivity = new DTActivityEntity(designThinkingActivityName);
+        // await this.DTArepository.save(DTActivity);
+        // const stage = new StageEntity('同理', DTActivity);
+        // await this.stageRepository.save(stage);
+        // const subStage = new SubStageEntity('定義利害關係人', '在此階段中參與者需要定義出與主題有關的利害關係人，通常會先讓組別中的每個人獨自提出想法，再綜合組別裡的每個人的想法。', false, stage);
+        // await this.subStageRepository.save(subStage);
+        // thinkingRoutines.forEach(async (routine) => {
+        //     const thinkingRoutine = new ThinkingRoutineEntity(routine.thinkingRoutineName, routine.thinkingRoutineType, routine.belongColumn, routine.needChecked, routine.index, routine.hint, subStage);
+        //     const assignees = routine.assignees;
+        //     console.log(assignees);
+        //     const assignedUsers = await this.userRepository
+        //         .createQueryBuilder('user')
+        //         .where('user.username IN (:...usernames)',{ usernames:assignees})
+        //         .getMany();
+        //     console.log(assignedUsers);
+        //     thinkingRoutine.assignees = assignedUsers;
+        //     await this.thinkingRoutineRepository.save(thinkingRoutine);
+        // })
+        // return DTActivity;
+        const DTActivity = new DTActivityEntity(designThinkingActivityName, designThinkingActivityDescription);
+        const leader = await this.userRepository.findOneBy({ id: leaderId });
+        if (leader) {
+            DTActivity.leaderShip = leader;
+            DTActivity.users = DTActivity.users || [];
+            DTActivity.users.push(leader);
+            await this.DTArepository.save(DTActivity);
+        } else {
+            throw Error('userId is not existed');
+        }
         const stage = new StageEntity('同理', DTActivity);
         await this.stageRepository.save(stage);
         const subStage = new SubStageEntity('定義利害關係人', '在此階段中參與者需要定義出與主題有關的利害關係人，通常會先讓組別中的每個人獨自提出想法，再綜合組別裡的每個人的想法。', false, stage);
@@ -44,7 +71,7 @@ export class DesignThinkingActivityRepositoryIpml implements DesignThinkingActiv
             console.log(assignees);
             const assignedUsers = await this.userRepository
                 .createQueryBuilder('user')
-                .where('user.username IN (:...usernames)',{ usernames:assignees})
+                .where('user.username IN (:...usernames)', { usernames: assignees })
                 .getMany();
             console.log(assignedUsers);
             thinkingRoutine.assignees = assignedUsers;
@@ -54,7 +81,7 @@ export class DesignThinkingActivityRepositoryIpml implements DesignThinkingActiv
     }
 
     async joinUser(username: string, designThinkingActivityId: number): Promise<DTActivityEntity> {
-        const user = await this.userRepository.findOneBy({ username: username },);
+        const user = await this.userRepository.findOneBy({ username: username });
         const designThinkingActivity = await this.DTArepository.findOne({
             relations: {
                 users: true,
@@ -95,9 +122,9 @@ export class DesignThinkingActivityRepositoryIpml implements DesignThinkingActiv
         //     .leftJoinAndSelect('DTActivityEntity.stages', 'stage').leftJoinAndSelect('stage.subStages', 'subStage')
         //     .where('DTActivityEntity.id = :id', { id: designThinkinActivityId }).getOne();
         const designThinkingActivities = await this.DTArepository.createQueryBuilder('designThinkingActivity')
-        .leftJoinAndSelect('designThinkingActivity.users', 'user')
-        .where('user.id = :userId', { userId })
-        .getMany();
+            .leftJoinAndSelect('designThinkingActivity.users', 'user')
+            .where('user.id = :userId', { userId })
+            .getMany();
 
         if (designThinkingActivities.length === 0) {
             throw Error('the user do not have any designThinkingActivity!');
@@ -111,7 +138,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "列出利害關係人",
         thinkingRoutineType: "發散",
-        assignees: ["012111", "012159", "012113"],
+        assignees: ["yihong", "houl", "ru", "kang"],
         hint: "請列出你心目中的利害關係人",
         needChecked: true,
         belongColumn: "進行中",
@@ -120,7 +147,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "列出利害關係人",
         thinkingRoutineType: "發散",
-        assignees: ["012111", "012159", "012113"],
+        assignees: ["yihong", "houl", "ru", "kang"],
         hint: "請列出你心目中的利害關係人",
         needChecked: true,
         belongColumn: "進行中",
@@ -129,7 +156,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "列出利害關係人",
         thinkingRoutineType: "發散",
-        assignees: ["012111", "012159", "012113"],
+        assignees: ["yihong", "houl", "ru", "kang"],
         hint: "請列出你心目中的利害關係人",
         needChecked: true,
         belongColumn: "進行中",
@@ -138,7 +165,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "列出利害關係人",
         thinkingRoutineType: "發散",
-        assignees:["012111", "012159", "012113"],
+        assignees: ["yihong", "houl", "ru", "kang"],
         hint: "請列出你心目中的利害關係人",
         needChecked: true,
         belongColumn: "進行中",
@@ -147,7 +174,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "歸納利害關係人",
         thinkingRoutineType: "歸納",
-        assignees:["012111", "012159", "012113"],
+        assignees: ["yihong", "houl", "ru", "kang"],
         hint: "請將類型相似的利害關係人貼上標籤",
         needChecked: true,
         belongColumn: "進行中",
@@ -156,7 +183,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "列出利害關係人-小組",
         thinkingRoutineType: "發散",
-        assignees: ["012111", "012159", "012113"],
+        assignees: ["yihong", "houl", "ru", "kang"],
         hint: "請以小組為單位列出利害關係人",
         needChecked: true,
         belongColumn: "進行中",
@@ -165,7 +192,7 @@ const thinkingRoutines = [
     {
         thinkingRoutineName: "自我介紹",
         thinkingRoutineType: "發散",
-        assignees: ["012111", "012159", "012113"],
+        assignees: ["yihong", "houl", "ru", "kang"],
         hint: "請說出自己的特質",
         needChecked: false,
         belongColumn: "進行中",
